@@ -31,7 +31,7 @@ function giveRand(max) {
     return randy;
 }
 
-function gameLoop() {
+function gameLoop() { //this will need to encompass the current code in a level, with a menu
     gamearea.fillStyle = 'black';
     gamearea.fillRect(0,0,canvas.width,canvas.height);
     for (paddle of paddles) {
@@ -39,9 +39,9 @@ function gameLoop() {
         paddle.drawPaddle();
     }
     ball.updateBall();
-    //updateLevel();
-    //drawLevel();
     ball.drawBall();
+    //updateLevel(); //needs to complete level if bricks.length() = 0;
+    //drawLevel(); //including damaged bricks;
 }
 
 class Paddle {

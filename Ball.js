@@ -7,7 +7,7 @@ class Ball {
         this.yVel = 0;
         this.lastHitBy; //needs to be paddle objects "players"
         this.launched = false;
-        this.maxSpeed = 3;
+        this.maxSpeed = 17;
         this.pOffset = 0;
         if (this.lastHitBy == null) {
             var pick = new Date().getTime()%2;
@@ -21,15 +21,20 @@ class Ball {
             for (paddle of paddles) {
                 if (this.collidesWith(paddle)) {
                     this.lastHitBy = paddle; // references the paddle that collided with ball
-                    this.xVel = -this.xVel;
-                    this.yVel = -this.yVel;
+                    if (Math.abs(this.lastHitBy.y-this.y) > this.lastHitBy.height/4) {
+                        this.xVel = -this.xVel*2;
+                        this.yVel = -this.yVel*4; //end parts of the paddle hit
+                    } else {
+                        this.xVel = -this.xVel*2;
+                        this.yVel = this.yVel*2; //default reflection
+                    }
                 }
             }
 
             /* for (i=bricks.length;i<=0;i--) {
                 if (this.collidesWith(brick)) {
-                    this.xv = -this.xv;
-                    this.yv = -this.yv;
+                    this.xVel = -this.xVel;
+                    this.yVel = -this.yVel;
                     if (brick.strength == 0) {
                         bricks.splice(index,1); 
                         this.lastHitBy.score = this.lastHitBy.score + brick.points;
@@ -39,8 +44,8 @@ class Ball {
                 }
             } */
 
-            //this.xVel >= this.maxSpeed ? this.xVel = this.maxSpeed : this.xVel = this.xVel;
-            //this.yVel >= this.maxSpeed ? this.yVel = this.maxSpeed : this.yVel = this.yVel;
+            Math.abs(this.xVel) >= this.maxSpeed ? this.xVel = this.xVel*0.5 : this.xVel = this.xVel;
+            Math.abs(this.yVel) >= this.maxSpeed ? this.yVel = this.yVel*0.5 : this.yVel = this.yVel;
             this.x = this.x+this.xVel;
             this.y = this.y+this.yVel;
             this.edges();
@@ -64,7 +69,7 @@ class Ball {
     }
 
     collidesWith(obj) {
-        if (Math.sqrt(Math.pow(this.x-obj.x,2)+Math.pow(this.y-obj.y,2)) <= 20){ 
+        if ((Math.abs(obj.x-this.x) <= obj.width/2+this.radius) && (Math.abs(obj.y-this.y) <= obj.height/2+this.radius)){ 
             return true;
         } else {
             return false;
@@ -83,15 +88,16 @@ class Ball {
 
     launchBall(e) {
         if (e.buttons == 1) {
-            ball.launched = true;
-            
             if (ball.lastHitBy == paddles[0]) {
-                ball.xVel = 5;
-                ball.yVel = 5;
+                ball.x = ball.x + 1;
+                ball.xVel = Math.max(5,giveRand(15));
+                ball.yVel = Math.max(5,giveRand(15));
             } else {
-                ball.xVel = -5;
-                ball.yVel = -5;
+                ball.x = ball.x - 1; //stops initial collision
+                ball.xVel = -Math.max(5,giveRand(15));
+                ball.yVel = -Math.max(5,giveRand(15));
             }
+            ball.launched = true;
             canvas.removeEventListener('mousedown', ball.launchBall);
         }        
     }
