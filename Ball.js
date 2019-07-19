@@ -7,7 +7,7 @@ class Ball {
         this.yVel = 0;
         this.lastHitBy; //needs to be paddle objects "players"
         this.launched = false;
-        this.maxSpeed = 17;
+        this.maxSpeed = 25;
         this.pOffset = 0;
         if (this.lastHitBy == null) {
             var pick = new Date().getTime()%2;
