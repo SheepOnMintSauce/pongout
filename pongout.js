@@ -2,7 +2,8 @@ window.onload = init;
 const canvas = document.createElement("canvas");
 const gamearea = canvas.getContext('2d');
 var paddles = [];
-var bricks = [];
+var levels = [];
+var currLevel = 0;
 //global stuff
 
 function init() {
@@ -20,8 +21,12 @@ function init() {
     paddles.push(new Paddle(canvas.width/16,canvas.height/2,"Player"));
     paddles.push(new Paddle(canvas.width-canvas.width/16,canvas.height/2,"Reflect"));
     ball = new Ball();
+    
     for (paddle of paddles) {
         paddle.drawPaddle();
+    }
+    for (let l=0;l<=19;l++) {
+        levels.push(new Screen(l));
     }
     window.setInterval(gameLoop,1000/30);
 }
@@ -40,8 +45,11 @@ function gameLoop() { //this will need to encompass the current code in a level,
     }
     ball.updateBall();
     ball.drawBall();
-    //updateLevel(); //needs to complete level if bricks.length() = 0;
-    //drawLevel(); //including damaged bricks;
+    if (levels[currLevel].getNumBricks() == 0) {
+        currLevel++;
+    }
+    levels[currLevel].drawLevel();
+    
 }
 
 class Paddle {
@@ -69,4 +77,5 @@ class Paddle {
         gamearea.fillStyle = 'white';
         gamearea.fillRect(this.x-this.width/2,this.y-this.height/2,this.width,this.height);
     }
+
 }

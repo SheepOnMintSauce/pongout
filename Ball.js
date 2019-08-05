@@ -22,11 +22,11 @@ class Ball {
                 if (this.collidesWith(paddle)) {
                     this.lastHitBy = paddle; // references the paddle that collided with ball
                     if (Math.abs(this.lastHitBy.y-this.y) > this.lastHitBy.height/4) {
-                        this.xVel = -this.xVel*2;
-                        this.yVel = -this.yVel*4; //end parts of the paddle hit
+                        this.xVel = -this.xVel;
+                        this.yVel = -this.yVel*2; //end parts of the paddle hit
                     } else {
                         this.xVel = -this.xVel*2;
-                        this.yVel = this.yVel*2; //default reflection
+                        this.yVel = this.yVel; //default reflection
                     }
                 }
             }
@@ -91,11 +91,11 @@ class Ball {
             if (ball.lastHitBy == paddles[0]) {
                 ball.x = ball.x + 1;
                 ball.xVel = Math.max(5,giveRand(15));
-                ball.yVel = Math.max(5,giveRand(15));
+                ball.yVel = Math.max(5,giveRand(8));
             } else {
                 ball.x = ball.x - 1; //stops initial collision
                 ball.xVel = -Math.max(5,giveRand(15));
-                ball.yVel = -Math.max(5,giveRand(15));
+                ball.yVel = -Math.max(5,giveRand(8));
             }
             ball.launched = true;
             canvas.removeEventListener('mousedown', ball.launchBall);
