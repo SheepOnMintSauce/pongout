@@ -31,18 +31,22 @@ class Ball {
                 }
             }
 
-            /* for (i=bricks.length;i<=0;i--) {
-                if (this.collidesWith(brick)) {
+            for (var i=levels[currLevel].sBricks.length-1;i<=0;i--) {
+                if (this.collidesWith(levels[currLevel].sBricks[i])) {
+                    console.log("block hit");
                     this.xVel = -this.xVel;
                     this.yVel = -this.yVel;
-                    if (brick.strength == 0) {
-                        bricks.splice(index,1); 
-                        this.lastHitBy.score = this.lastHitBy.score + brick.points;
+                    if (levels[currLevel].sBricks[i].strength == 0) {
+                        this.lastHitBy.score = this.lastHitBy.score + levels[currLevel].sBricks[i].points;
+                        levels[currLevel].sBricks[i].splice(i,1);
+                        levels[currLevel].numBricks--;
                     } else {
-                        brick.strength = brick.strength - 1;
-                    }
+                        levels[currLevel].sBricks[i].strength--;
+                        //could change colour slightly to show damage
+                    }  
                 }
-            } */
+            }
+            
 
             Math.abs(this.xVel) >= this.maxSpeed ? this.xVel = this.xVel*0.5 : this.xVel = this.xVel;
             Math.abs(this.yVel) >= this.maxSpeed ? this.yVel = this.yVel*0.5 : this.yVel = this.yVel;
