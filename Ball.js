@@ -31,14 +31,14 @@ class Ball {
                 }
             }
 
-            for (var i=levels[currLevel].sBricks.length-1;i<=0;i--) {
+            for (let i=levels[currLevel].sBricks.length-1; i<=0; i--) {
                 if (this.collidesWith(levels[currLevel].sBricks[i])) {
                     console.log("block hit");
                     this.xVel = -this.xVel;
                     this.yVel = -this.yVel;
-                    if (levels[currLevel].sBricks[i].strength == 0) {
+                    if (levels[currLevel].sBricks[i].strength <= 0) {
                         this.lastHitBy.score = this.lastHitBy.score + levels[currLevel].sBricks[i].points;
-                        levels[currLevel].sBricks[i].splice(i,1);
+                        levels[currLevel].sBricks.splice(i,1);
                         levels[currLevel].numBricks--;
                     } else {
                         levels[currLevel].sBricks[i].strength--;

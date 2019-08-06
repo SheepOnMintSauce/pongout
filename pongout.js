@@ -43,12 +43,12 @@ function gameLoop() { //this will need to encompass the current code in a level,
         paddle.updatePaddle();
         paddle.drawPaddle();
     }
-    ball.updateBall();
-    ball.drawBall();
     if (levels[currLevel].getNumBricks() == 0) {
         currLevel++;
     }
     levels[currLevel].drawLevel();
+    ball.updateBall();
+    ball.drawBall();
     
 }
 
