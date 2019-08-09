@@ -21,6 +21,7 @@ class Ball {
             for (paddle of paddles) {
                 if (this.collidesWith(paddle)) {
                     this.lastHitBy = paddle; // references the paddle that collided with ball
+                    blip1.play();
                     if (Math.abs(this.lastHitBy.y-this.y) > this.lastHitBy.height/4) {
                         this.xVel = -this.xVel;
                         this.yVel = -this.yVel*2; //end parts of the paddle hit
@@ -33,13 +34,14 @@ class Ball {
 
             for (let i=levels[currLevel].sBricks.length-1; i>=0; i--) {
                 if (this.collidesWith(levels[currLevel].sBricks[i])) {
-                    console.log("block hit");
                     this.xVel = -this.xVel;
                     this.yVel = -this.yVel;
+                    blip1.play();
                     if (levels[currLevel].sBricks[i].strength == 0) {
                         this.lastHitBy.score = this.lastHitBy.score + levels[currLevel].sBricks[i].points;
                         levels[currLevel].sBricks.splice(i,1);
                         levels[currLevel].numBricks--;
+                        bricksplode.play()
                     } else {
                         levels[currLevel].sBricks[i].strength--;
                         //could change colour slightly to show damage
@@ -87,6 +89,7 @@ class Ball {
         }
         if (this.y-this.radius <= 0 || this.y+this.radius >= canvas.height) {
             this.yVel = -this.yVel;
+            blip2.play();
         }
     }
 

@@ -4,6 +4,9 @@ const gamearea = canvas.getContext('2d');
 var paddles = [];
 var levels = [];
 var currLevel = 0;
+var blip1;
+var blip2;
+var bricksplode;
 //global stuff
 
 function init() {
@@ -12,7 +15,9 @@ function init() {
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.border = "0";
-
+    blip1 = document.getElementById("blip");
+    blip2 = document.getElementById("blip2");
+    bricksplode = document.getElementById("brick");
     document.body.appendChild(canvas);
     gamearea.fillStyle = 'black';
     gamearea.fillRect(0,0,canvas.width,canvas.height);
