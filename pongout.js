@@ -7,6 +7,15 @@ var currLevel = 0;
 var blip1;
 var blip2;
 var bricksplode;
+var soundOn = true;
+var t1,t2 = 0;
+var pongBrick = new Image(16,32);
+var redBrick = new Image(16,32);
+var greenBrick = new Image(16,32);
+var blueBrick = new Image(16,32);
+var yellowBrick = new Image(16,32);
+var purpleBrick = new Image(16,32);
+var lBlueBrick = new Image(16,32);
 //global stuff
 
 function init() {
@@ -18,22 +27,32 @@ function init() {
     blip1 = document.getElementById("blip");
     blip2 = document.getElementById("blip2");
     bricksplode = document.getElementById("brick");
+    pongBrick.src="pongBrick.png";
+    redBrick.src="redBrick.png";
+    greenBrick.src="greenBrick.png";
+    blueBrick.src="blueBrick.png";
+    yellowBrick.src="yellowBrick.png";
+    purpleBrick.src="purpleBrick.png";
+    lBlueBrick.src="lBlueBrick.png";
     document.body.appendChild(canvas);
     gamearea.fillStyle = 'black';
     gamearea.fillRect(0,0,canvas.width,canvas.height);
     canvas.addEventListener("mouseenter", (e) => {canvas.style.cursor = "none"});
     canvas.addEventListener("mouseleave", (e) => {canvas.style.cursor = "default"});
+    window.addEventListener("keyup", (e) => {if (e.code==='KeyS') {soundOn = !soundOn}});
     paddles.push(new Paddle(canvas.width/16,canvas.height/2,"Player"));
     paddles.push(new Paddle(canvas.width-canvas.width/16,canvas.height/2,"Reflect"));
+    
     ball = new Ball();
     
     for (paddle of paddles) {
+        canvas.addEventListener('mousemove', paddle.setupPaddle.bind(paddle));
         paddle.drawPaddle();
     }
     for (let l=0;l<=19;l++) {
         levels.push(new Screen(l));
     }
-    window.setInterval(gameLoop,1000/30);
+    window.requestAnimationFrame(gameLoop); //seems to be smoother :)
 }
 
 function giveRand(max) {
@@ -42,45 +61,20 @@ function giveRand(max) {
 }
 
 function gameLoop() { //this will need to encompass the current code in a level, with a menu
+    t1 = performance.now();
     gamearea.fillStyle = 'black';
     gamearea.fillRect(0,0,canvas.width,canvas.height);
     for (paddle of paddles) {
         paddle.updatePaddle();
         paddle.drawPaddle();
     }
-    if (levels[currLevel].getNumBricks() == 0) {
+    if (!levels[currLevel].getNumBricks()) {
         currLevel++;
     }
     levels[currLevel].drawLevel();
     ball.updateBall();
     ball.drawBall();
-    
-}
-
-class Paddle {
-    constructor(x,y,type) {
-        this.x = x;
-        this.y = y;
-        this.width = 8;
-        this.height = 80;
-        this.type = type;
-        this.score = 0;
-    }
-
-    updatePaddle() {
-        if (this.type == "Player") {
-            document.addEventListener('mousemove', (e) => { this.y = e.clientY; });
-        }
-        if (this.type == "Reflect") {
-            document.addEventListener('mousemove', (e) => { this.y = canvas.height-e.clientY; });
-        }
-        if (this.y < this.height/2) { this.y = this.height/2;}
-        if (this.y > canvas.height-this.height/2) { this.y = canvas.height-this.height/2} 
-    }
-
-    drawPaddle() {
-        gamearea.fillStyle = 'white';
-        gamearea.fillRect(this.x-this.width/2,this.y-this.height/2,this.width,this.height);
-    }
-
+    t2 = performance.now();
+    console.log(t2-t1);
+    window.requestAnimationFrame(gameLoop);
 }

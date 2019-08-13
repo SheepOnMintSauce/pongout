@@ -9,6 +9,7 @@ class Ball {
         this.launched = false;
         this.maxSpeed = 25;
         this.pOffset = 0;
+        this.launcherAdded = false;
         if (this.lastHitBy == null) {
             var pick = new Date().getTime()%2;
             this.lastHitBy = paddles[pick];
@@ -21,7 +22,9 @@ class Ball {
             for (paddle of paddles) {
                 if (this.collidesWith(paddle)) {
                     this.lastHitBy = paddle; // references the paddle that collided with ball
-                    blip1.play();
+                    if (soundOn) { 
+                        blip1.play();
+                    }
                     if (Math.abs(this.lastHitBy.y-this.y) > this.lastHitBy.height/4) {
                         this.xVel = -this.xVel;
                         this.yVel = -this.yVel*2; //end parts of the paddle hit
@@ -36,15 +39,18 @@ class Ball {
                 if (this.collidesWith(levels[currLevel].sBricks[i])) {
                     this.xVel = -this.xVel;
                     this.yVel = -this.yVel;
-                    blip1.play();
+                    if (soundOn) {
+                        blip1.play();
+                    }
                     if (levels[currLevel].sBricks[i].strength == 0) {
                         this.lastHitBy.score = this.lastHitBy.score + levels[currLevel].sBricks[i].points;
                         levels[currLevel].sBricks.splice(i,1);
                         levels[currLevel].numBricks--;
-                        bricksplode.play()
+                        if (soundOn) {
+                            bricksplode.play()
+                        }
                     } else {
                         levels[currLevel].sBricks[i].strength--;
-                        //could change colour slightly to show damage
                     }  
                 }
             }
@@ -63,7 +69,10 @@ class Ball {
                 this.x = this.lastHitBy.x-this.lastHitBy.width/2-this.radius;
             }
             this.y = this.lastHitBy.y;
-            canvas.addEventListener('mousedown',this.launchBall);
+            if (this.launcherAdded == false) {
+                canvas.addEventListener('mousedown',this.launchBall);
+                this.launcherAdded = true;
+            }
         }
     }
 
@@ -89,7 +98,9 @@ class Ball {
         }
         if (this.y-this.radius <= 0 || this.y+this.radius >= canvas.height) {
             this.yVel = -this.yVel;
-            blip2.play();
+            if (soundOn) {
+                blip2.play();
+            }
         }
     }
 
@@ -105,6 +116,7 @@ class Ball {
                 ball.yVel = -Math.max(5,giveRand(8));
             }
             ball.launched = true;
+            ball.launcherAdded = false;
             canvas.removeEventListener('mousedown', ball.launchBall);
         }        
     }
